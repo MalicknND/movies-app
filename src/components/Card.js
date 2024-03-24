@@ -1,11 +1,13 @@
 import React from "react";
 
 const Card = ({ movie }) => {
+  // Fonction pour formater la date de sortie du film
   const dateFormater = (date) => {
     let [year, month, day] = date.split("-");
     return [day, month, year].join("/");
   };
 
+  // Fonction pour trouver les genres du film en fonction de leurs IDs
   const genreFinder = () => {
     let genreArray = [];
     for (let i = 0; i < movie.genre_ids.length; i++) {
@@ -71,24 +73,32 @@ const Card = ({ movie }) => {
           genreArray.push("Non défini");
       }
     }
+    // Retourne une liste de genres sous forme d'éléments li
     return genreArray.map((genre, index) => <li key={index}>{genre}</li>);
   };
 
+  // Fonction pour ajouter le film à la liste de coups de cœur dans le stockage local
   const addStorage = () => {
+    // Récupère les données stockées localement, s'il y en a
     let storedData = window.localStorage.movies
       ? window.localStorage.movies.split(",")
       : [];
-
+    // Vérifie si le film est déjà dans la liste
     if (!storedData.includes(movie.id.toString())) {
+      // Ajoute l'ID du film à la liste
       storedData.push(movie.id);
+      // Met à jour les données stockées localement
       window.localStorage.movies = storedData;
     }
   };
 
+  // Fonction pour supprimer le film de la liste de coups de cœur dans le stockage local
   const deleteStorage = () => {
+    // Récupère les données stockées localement
     let storedData = window.localStorage.movies.split(",");
+    // Filtrer le film à supprimer de la liste
     let newData = storedData.filter((id) => id != movie.id);
-
+    // Met à jour les données stockées localement avec la nouvelle liste filtrée
     window.localStorage.movies = newData;
   };
 
