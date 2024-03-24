@@ -4,6 +4,7 @@ import Card from "./Card";
 const Form = () => {
   const [movies, setMovies] = useState([]);
   const [search, setSearch] = useState("code");
+  const [goodToBad, setGoodToBad] = useState(null);
 
   useEffect(() => {
     axios
@@ -31,19 +32,36 @@ const Form = () => {
             <input type="submit" value="Rechercher" />
           </form>
           <div className="btn-sort-container">
-            <div className="btn-sort" id="goodToBad">
+            <div
+              className="btn-sort"
+              id="goodToBad"
+              onClick={() => setGoodToBad("goodToBad")}
+            >
               Top<span>➜</span>
             </div>
-            <div className="btn-sort" id="badToGood">
+            <div
+              className="btn-sort"
+              id="badToGood"
+              onClick={() => setGoodToBad("badToGood")}
+            >
               Flop<span>➜</span>
             </div>
           </div>
         </div>
       </div>
       <div className="result">
-        {movies.slice(0, 12).map((movie) => (
-          <Card movie={movie} key={movie.id} />
-        ))}
+        {movies
+          .slice(0, 12)
+          .sort((a, b) => {
+            if (goodToBad === "goodToBad") {
+              return b.vote_average - a.vote_average;
+            } else if (goodToBad === "badToGood") {
+              return a.vote_average - b.vote_average;
+            }
+          })
+          .map((movie) => (
+            <Card movie={movie} key={movie.id} />
+          ))}
       </div>
     </div>
   );
